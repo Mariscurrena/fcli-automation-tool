@@ -27,7 +27,7 @@ appversion(){
 }
 sast(){
     echo -e "${GREEN}Static Application Security Testing${GREENF}"
-    echo -n "Ingresa la ruta de tu proyecto (.zip): " #/home/mobaxterm/MyDocuments/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/package.zip
+    echo -n "Ingresa la ruta de tu proyecto (.zip): "
     read project
     echo -n "Ingresa el nombre de la aplicación (SSC): "
     read app
@@ -62,14 +62,14 @@ OSS(){
     echo -e "${GREEN}Herramienta para empaquetar proyectos para analsis de composición de software${GREENF}"
     echo -n "Ingresa la ruta completa de la carpeta del proyecto: "
     read path_project
-    cd "$path_project" #C:/Users/Angel Mariscurrena/Documents/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/fortify-IWA-Java-main
+    cd "$path_project"
     echo -n "Ingresa el nombre que tendrá el binario(.zip): "
     read binary
     echo "scancentral package -bt none -oss -o $binary"
 }
 
 #login
-select option in "app" "appversion" "SAST-Scan" "Packing-Project" "Packing-OSS" "quit"
+select option in "app" "appversion" "SAST-Scan" "Packaging-Project" "Packaging-OSS" "quit"
 do
         case $option in
             app) app;;
