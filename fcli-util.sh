@@ -26,7 +26,7 @@ appversion(){
     echo ""
 }
 sast(){
-    echo "SAST Scan Option Soon..."
+    echo -e "${GREEN}Static Application Security Testing${GREENF}"
     echo -n "Ingresa la ruta de tu proyecto (.zip): " #/home/mobaxterm/MyDocuments/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/package.zip
     read project
     echo -n "Ingresa el nombre de la aplicación (SSC): "
@@ -34,21 +34,40 @@ sast(){
     echo -n "Ingresa la versión de ${app} (SSC): "
     read version
     ###fcli
-    #fcli ssc appversion create $app:$version --skip-if-exists --auto-required-attrs
     fcli sc-sast scan start -v 23.2 -f $project --publish-to $app:$version --store x
     fcli sc-sast scan wait-for ::x::jobToken
     echo ""
-    # echo "fcli ssc appversion create ${app}:${version} --auto-required-attrs --skip-if-exists"
-    # echo $project
+}
+packing(){
+    echo -e "${GREEN}Herramienta para empaquetar proyectos${GREENF}"
+    echo -n "Ingresa la ruta completa de la carpeta del proyecto: "
+    read path_project
+    cd "$path_project" #C:/Users/Angel Mariscurrena/Documents/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/fortify-IWA-Java-main
+    echo -n "Ingresa el nombre que tendrá el binario(.zip): "
+    read binary
+
+    echo -n "Selecciona la build tool (mvn,gradle,msbuild,none): "
+    select option in "maven" "gradle" "msbuild" "ninguno" "quit"
+    do
+            case $option in
+                maven) echo "scancentral package -bt mvn -bf pom.xml -o $binary";;
+                gradle) echo "scancentral package -bt gradle -bf build.gradle -o $binary";;
+                msbuild) echo "scancentral package -bt msbuild -bf my.sln -o $binary";;
+                ninguno) echo "scancentral package -bt none -o $binary";;
+                quit) clear && break;;
+                *) echo -e "${RED}That is not a valid option.${REDF}";;
+            esac
+    done
 }
 
-login
-select option in "app" "appversion" "SAST-Scan" "quit"
+#login
+select option in "app" "appversion" "SAST-Scan" "Packing-Project" "quit"
 do
         case $option in
             app) app;;
             appversion) appversion;;
             SAST-Scan) sast;;
+            Packing-Project) packing;;
             quit) clear && break;;
             *) echo -e "${RED}That is not a valid option.${REDF}";;
         esac
