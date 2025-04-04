@@ -68,7 +68,7 @@ OSS(){
     echo "scancentral package -bt none -oss -o $binary"
 }
 
-#login
+login
 select option in "app" "appversion" "SAST-Scan" "Packaging-Project" "Packaging-OSS" "quit"
 do
         case $option in
