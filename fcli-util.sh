@@ -49,10 +49,10 @@ packing(){
     select option in "maven" "gradle" "msbuild" "ninguno" "quit"
     do
             case $option in
-                maven) echo "scancentral package -bt mvn -bf pom.xml -o $binary";;
-                gradle) echo "scancentral package -bt gradle -bf build.gradle -o $binary";;
-                msbuild) echo "scancentral package -bt msbuild -bf my.sln -o $binary";;
-                ninguno) echo "scancentral package -bt none -o $binary";;
+                maven) scancentral package -bt mvn -bf pom.xml -o $binary ;;
+                gradle) scancentral package -bt gradle -bf build.gradle -o $binary ;;
+                msbuild) scancentral package -bt msbuild -bf my.sln -o $binary ;;
+                ninguno) scancentral package -bt none -o $binary ;;
                 quit) clear && break;;
                 *) echo -e "${RED}That is not a valid option.${REDF}";;
             esac
