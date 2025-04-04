@@ -45,7 +45,6 @@ packing(){
     cd "$path_project" #C:/Users/Angel Mariscurrena/Documents/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/fortify-IWA-Java-main
     echo -n "Ingresa el nombre que tendrá el binario(.zip): "
     read binary
-
     echo -n "Selecciona la build tool (mvn,gradle,msbuild,none): "
     select option in "maven" "gradle" "msbuild" "ninguno" "quit"
     do
@@ -59,15 +58,25 @@ packing(){
             esac
     done
 }
+OSS(){
+    echo -e "${GREEN}Herramienta para empaquetar proyectos para analsis de composición de software${GREENF}"
+    echo -n "Ingresa la ruta completa de la carpeta del proyecto: "
+    read path_project
+    cd "$path_project" #C:/Users/Angel Mariscurrena/Documents/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/fortify-IWA-Java-main
+    echo -n "Ingresa el nombre que tendrá el binario(.zip): "
+    read binary
+    echo "scancentral package -bt none -oss -o $binary"
+}
 
 #login
-select option in "app" "appversion" "SAST-Scan" "Packing-Project" "quit"
+select option in "app" "appversion" "SAST-Scan" "Packing-Project" "Packing-OSS" "quit"
 do
         case $option in
             app) app;;
             appversion) appversion;;
             SAST-Scan) sast;;
             Packing-Project) packing;;
+            Packing-OSS) OSS;;
             quit) clear && break;;
             *) echo -e "${RED}That is not a valid option.${REDF}";;
         esac
