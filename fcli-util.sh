@@ -65,7 +65,7 @@ OSS(){
     cd "$path_project"
     echo -n "Ingresa el nombre que tendrá el binario(.zip): "
     read binary
-    echo "scancentral package -bt none -oss -o $binary"
+    scancentral package -bt none -oss -o $binary
 }
 
 login
