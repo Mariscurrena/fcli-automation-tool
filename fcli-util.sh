@@ -27,7 +27,10 @@ appversion(){
 }
 sast(){
     echo -e "${GREEN}Static Application Security Testing${GREENF}"
-    echo -n "Ingresa la ruta de tu proyecto (.zip): "
+    echo -n "Ingresa la ruta de tu proyecto: "
+    read path
+    cd "$path"
+    echo -n "Ingresa el nombre del empaquetado (.zip): "
     read project
     echo -n "Ingresa el nombre de la aplicación (SSC): "
     read app
