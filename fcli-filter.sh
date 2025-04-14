@@ -30,8 +30,9 @@ filter(){
     echo -e "$red Tag: Exploitable $end"
     for i in $(seq 1 $((${#apps[@]} - 1))); do
         if [ -n "${apps[$i]}" ] && [ -n "${versions[$i]}" ]; then
+            echo -e "Application: ${apps[$i]} / Version: ${versions[$i]}" >> report.yaml
             echo -e "$blue Application: ${apps[$i]} / Version: ${versions[$i]} $end"
-            fcli ssc issue count --av "${apps[$i]}":"${versions[$i]}" -o yaml --filter="Analysis:Exploitable"
+            fcli ssc issue count --av "${apps[$i]}":"${versions[$i]}" -o yaml --filter="Analysis:Exploitable" | tee -a report.yaml
         else
             echo "Index $i empty"
         fi
