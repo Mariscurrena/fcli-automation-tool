@@ -43,12 +43,21 @@ sast(){
 }
 packing(){
     echo -e "${GREEN}Herramienta para empaquetar proyectos${GREENF}"
+    echo "¿Quieres instalar la ultima versión de Scancentral Client? (Si ya cuentas con una version soportada no es necesario) "
+    select opt in "Si" "No" "quit"
+    do
+            case $opt in
+                Si) echo "Instalando Scancentral Client...\n" && fcli tool sc-client install -v=latest && sleep 1 && break;;
+                No) echo "OK" && sleep 1 && break;;
+                *) echo -e "${RED}Opcion invalida.${REDF}";;
+            esac
+    done
     echo -n "Ingresa la ruta completa de la carpeta del proyecto: "
     read path_project
-    cd "$path_project" #C:/Users/Angel Mariscurrena/Documents/Cybersecurity-Optima/Products/Fortify/Fortify-Extra/IWA/fortify-IWA-Java-main
+    cd "$path_project"
     echo -n "Ingresa el nombre que tendrá el binario(.zip): "
     read binary
-    echo -n "Selecciona la build tool (mvn,gradle,msbuild,none): "
+    echo "Selecciona la build tool (mvn,gradle,msbuild,none): "
     select option in "maven" "gradle" "msbuild" "ninguno" "quit"
     do
             case $option in
@@ -57,7 +66,7 @@ packing(){
                 msbuild) scancentral package -bt msbuild -bf my.sln -o $binary ;;
                 ninguno) scancentral package -bt none -o $binary ;;
                 quit) clear && break;;
-                *) echo -e "${RED}That is not a valid option.${REDF}";;
+                *) echo -e "${RED}Opcion invalida.${REDF}";;
             esac
     done
 }
@@ -78,9 +87,9 @@ do
             app) app;;
             appversion) appversion;;
             SAST-Scan) sast;;
-            Packing-Project) packing;;
-            Packing-OSS) OSS;;
+            Packaging-Project) packing;;
+            Packaging-OSS) OSS;;
             quit) clear && break;;
-            *) echo -e "${RED}That is not a valid option.${REDF}";;
+            *) echo -e "${RED}Opcion Invalida..${REDF}";;
         esac
 done
