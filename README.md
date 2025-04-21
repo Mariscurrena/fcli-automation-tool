@@ -5,7 +5,7 @@
 
 This repository contains automation scripts created to perform custom actions to address complex customer scenarios, such as:
 
-  ### * Running static analysis (SAST) in all command-line tools, whether in IDE command lines or any supported terminal (MS-DOS or UNIX).
+  ### * Running static analysis (SAST) in all command-line tools, whether in IDE command lines or any supported terminal in a friendly way (MS-DOS or UNIX).
   ### * Filtering all vulnerabilities labeled as exploitable to obtain documented information and demonstrate regulatory compliance in an audit process.
   ### * Importing and exporting artifacts between different deployment environments such as FOD (SaaS deployment) and Fortify On Premises.
 
