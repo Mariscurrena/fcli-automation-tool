@@ -83,7 +83,16 @@ cross(){
     read scan_id
     echo -ne "$blue FOD API URL:$end "
     read api
+    echo -ne "$blue SSC APP NAME:$end "
+    read app
+    echo -ne "$blue SSC APP Version NAME:$end "
+    read av
     curl -X GET --header 'Accept: application/json' -H "Authorization: Bearer $token" "$api/api/v3/scans/$scan_id/fpr" -o $scan_id.fpr
+    sleep 3
+    loading
+    id="${scan_id}.fpr"
+    echo $id
+    fcli ssc artifact upload --av="$app":"$av" -f=$id
     echo ""
 }
 

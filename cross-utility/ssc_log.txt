@@ -1,0 +1,6 @@
+ Name     Type  Url                                       Created                  Expires                  Expired  Action  
+ default  SSC   SSC:     http://192.168.184.135:8080/ssc  2025-04-21 18:28:47 UTC  2025-04-24 18:28:47 UTC  No       CREATED 
+                SC-SAST: N/A (No client-auth-token)                                                                          
+                SC-DAST: N/A (Disabled in SSC)                                                                               
+
+
