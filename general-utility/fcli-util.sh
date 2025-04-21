@@ -44,7 +44,7 @@ sast(){
 packing(){
     echo -e "${GREEN}Herramienta para empaquetar proyectos${GREENF}"
     echo "¿Quieres instalar la ultima versión de Scancentral Client? (Si ya cuentas con una version soportada no es necesario) "
-    select opt in "Si" "No" "quit"
+    select opt in "Si" "No"
     do
             case $opt in
                 Si) echo "Instalando Scancentral Client...\n" && fcli tool sc-client install -v=latest && sleep 1 && break;;
