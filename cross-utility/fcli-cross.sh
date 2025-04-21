@@ -16,7 +16,7 @@ loading(){
             sleep 0.1
         done
     }   
-    text=" L-O-A-D-I-N-G " ##Can be changed in any language or with other text
+    text=" L-O-A-D-I-N-G "
     echo ""
     bar
     for (( i=0; i<${#text}; i++ )); do
@@ -25,10 +25,11 @@ loading(){
     done
     bar
     echo ""
+    echo ""
 }
 
-##Login Function
-login(){
+##FOD Login Function
+fod_login(){
     echo -ne "$blue -FOD Username:$end "
     read fod_usr
     echo -ne "$blue -FOD Password:$end "
@@ -39,7 +40,39 @@ login(){
     echo -ne "$blue -FOD API URL:$end "
     read fod_api
     #Scope: manage-apps
-    bearer= curl --request POST $fod_api --form 'scope="api-tenant"' --form 'grant_type="password"' --form "username=$fod_ten\\$fod_usr" --form "password=$fod_pwd" -o bearer.txt
+    curl --request POST $fod_api --form 'scope="api-tenant"' --form 'grant_type="password"' --form "username=$fod_ten\\$fod_usr" --form "password=$fod_pwd" -o bearer.txt
+    text=$(<bearer.txt) 
+    token=${text:(+17):(-64)} 
+    if echo "$text" | grep -q "error"; then
+        echo -e $red"ERROR 401-Something about the Authorization went wrong."$end
+        echo $text
+        sleep 3
+        exit
+    else
+        echo -e $green"Fortify On Demand Login Successful!"$end
+        echo ""
+    fi
+}
+
+##SSC Login Function
+ssc_login(){
+    echo -ne "$blue -SSC URL:$end "
+    read ssc 
+    echo -ne "$blue -Username:$end "
+    read usrname 
+    echo -ne "$blue -Password:$end "
+    read -s passwrd
+    echo ""
+    fcli ssc session login --url $ssc -u $usrname -p $passwrd > ssc.txt
+    echo ""
+    if echo $(<ssc.txt) | grep -q "CREATED"; then
+        echo -e $green"Software Security Center Login Successful!"$end
+    else
+        echo -e $red"ERROR - Something about the Authorization went wrong."$end
+        echo $text
+        sleep 3
+        exit
+    fi
 }
 
 #Main Function
@@ -47,7 +80,9 @@ main(){
     echo -e "$green Welcome to the cross utility$end"
     echo "This tool was developed to allow customers who need to synchronize FPR files across different environments (FOD <---> Fortify On Prem)"
     echo ""
-    login
+    # loading
+    # fod_login
+    ssc_login
 }
 
 #Main execution
