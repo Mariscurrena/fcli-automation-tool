@@ -13,7 +13,7 @@ loading(){
         end="\033[0m"
         for (( i=1; i<=20; i++ )); do
             echo -en "$blue=$end"
-            sleep 0.1
+            sleep 0.01
         done
     }   
     text=" L-O-A-D-I-N-G "
@@ -21,7 +21,7 @@ loading(){
     bar
     for (( i=0; i<${#text}; i++ )); do
         echo -n "${text:$i:1}"
-        sleep 0.1
+        sleep 0.01
     done
     bar
     echo ""
@@ -40,9 +40,8 @@ fod_login(){
     echo -ne "$blue -FOD API URL:$end "
     read fod_api
     #Scope: manage-apps
-    curl --request POST $fod_api --form 'scope="api-tenant"' --form 'grant_type="password"' --form "username=$fod_ten\\$fod_usr" --form "password=$fod_pwd" -o bearer.txt
-    text=$(<bearer.txt) 
-    token=${text:(+17):(-64)} 
+    curl --request POST $fod_api --form 'scope="api-tenant"' --form 'grant_type="password"' --form "username=$fod_ten\\$fod_usr" --form "password=$fod_pwd" -o fod_log.txt
+    text=$(<fod_log.txt) 
     if echo "$text" | grep -q "error"; then
         echo -e $red"ERROR 401-Something about the Authorization went wrong."$end
         echo $text
@@ -63,9 +62,9 @@ ssc_login(){
     echo -ne "$blue -Password:$end "
     read -s passwrd
     echo ""
-    fcli ssc session login --url $ssc -u $usrname -p $passwrd > ssc.txt
+    fcli ssc session login --url $ssc -u $usrname -p $passwrd > ssc_log.txt
     echo ""
-    if echo $(<ssc.txt) | grep -q "CREATED"; then
+    if echo $(<ssc_log.txt) | grep -q "CREATED"; then
         echo -e $green"Software Security Center Login Successful!"$end
     else
         echo -e $red"ERROR - Something about the Authorization went wrong."$end
@@ -75,14 +74,47 @@ ssc_login(){
     fi
 }
 
+##FPR Cross Function
+cross(){
+    echo ""
+    jwt=$(<fod_log.txt)
+    token=${jwt:(+17):(-64)}
+    echo -ne "$blue FOD Scan ID:$end "
+    read scan_id
+    echo -ne "$blue FOD API URL:$end "
+    read api
+    curl -X GET --header 'Accept: application/json' -H "Authorization: Bearer $token" "$api/api/v3/scans/$scan_id/fpr" -o $scan_id.fpr
+    echo ""
+}
+
+##Authentication Function
+auth(){
+    fod_login
+    ssc_login
+    cross
+}
+
+##Welcome Function
+welcome(){
+    echo -e "$blue Do you need to login or you are using a current session (fcli session and jwt)?$end "
+    select opt in "Login" "Current" "quit"
+    do
+            case $opt in
+                Login) auth;;
+                Current) cross;;
+                quit) clear && break;;
+                *) echo -e "${RED}Opcion invalida.${REDF}";;
+            esac
+    done
+}
+
 #Main Function
 main(){
     echo -e "$green Welcome to the cross utility$end"
     echo "This tool was developed to allow customers who need to synchronize FPR files across different environments (FOD <---> Fortify On Prem)"
     echo ""
-    # loading
-    # fod_login
-    ssc_login
+    loading
+    welcome
 }
 
 #Main execution
