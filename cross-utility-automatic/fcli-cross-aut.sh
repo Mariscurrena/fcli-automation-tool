@@ -66,6 +66,7 @@ ssc_login(){
     echo ""
     if echo $(<ssc_log.txt) | grep -q "CREATED"; then
         echo -e $green"Software Security Center Login Successful!"$end
+	echo ""
     else
         echo -e $red"ERROR - Something about the Authorization went wrong."$end
         echo $text
