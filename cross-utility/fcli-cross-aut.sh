@@ -81,6 +81,8 @@ cross(){
     token=${jwt:(+17):(-64)}
     echo -ne "$blue CSV File Path:$end "
     read csv
+    echo -ne "$blue FOD API URL:$end "
+    read api
 
     mapfile -t sc_id < <(awk -F',' '{print $1}' $csv)
     mapfile -t app < <(awk -F',' '{print $2}' $csv)
@@ -89,16 +91,16 @@ cross(){
     for i in $(seq 1 $((${#sc_id[@]} - 1))); do
         if [ -n "${sc_id[$i]}" ] && [ -n "${app[$i]}" ] && [ -n "${app_v[$i]}" ]; then
             ###FOD Instructions
-            curl -X GET --header 'Accept: application/json' -H "Authorization: Bearer $token" "$api/api/v3/scans/$scan_id/fpr" -o $scan_id.fpr
+            curl -X GET --header 'Accept: application/json' -H "Authorization: Bearer $token" "$api/api/v3/scans/${sc_id[$i]}/fpr" -o  ${sc_id[$i]}.fpr
             sleep 3
             loading
             #Needed reference to scan id
             id="${sc_id[$i]}.fpr"
 
-            ###SSC Instructions
+            # ###SSC Instructions
             echo -e "ScanID: ${sc_id[$i]} / Application: ${app[$i]} / Application Version: ${app_v[$i]}"
             fcli ssc appversion create "$app[$i]":"$app_v[$i]" --auto-required-attrs --skip-if-exists --store myVersion
-            fcli ssc artifact upload $id --appversion ::myVersion::
+            fcli ssc artifact upload --appversion ::myVersion:: -f=$id
             sleep 1
             echo ""
         else
