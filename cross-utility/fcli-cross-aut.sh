@@ -76,32 +76,44 @@ ssc_login(){
 
 ##FPR Cross Function Automated with a csv
 cross(){
-    echo ""
     jwt=$(<fod_log.txt)
     token=${jwt:(+17):(-64)}
     echo -ne "$blue CSV File Path:$end "
     read csv
     echo -ne "$blue FOD API URL:$end "
     read api
-
-    mapfile -t sc_id < <(awk -F',' '{print $1}' $csv)
-    mapfile -t app < <(awk -F',' '{print $2}' $csv)
-    mapfile -t app_v < <(awk -F',' '{print $3}' $csv)
-
-    for i in $(seq 1 $((${#sc_id[@]} - 1))); do
+    mapfile -t sc_id < <(awk -F',' 'NR > 1 {print $1}' $csv)
+    mapfile -t app < <(awk -F',' 'NR > 1 {print $2}' $csv)
+    mapfile -t app_v < <(awk -F',' 'NR > 1 {print $3}' $csv)
+    echo ""
+    recieve_fpr
+    upload_fpr
+}
+recieve_fpr(){
+    for i in $(seq 0 $((${#sc_id[@]} - 1))); do
         if [ -n "${sc_id[$i]}" ] && [ -n "${app[$i]}" ] && [ -n "${app_v[$i]}" ]; then
             ###FOD Instructions
             curl -X GET --header 'Accept: application/json' -H "Authorization: Bearer $token" "$api/api/v3/scans/${sc_id[$i]}/fpr" -o  ${sc_id[$i]}.fpr
-            sleep 3
-            loading
+            sleep 1
+        else
+            echo "Index $i empty"
+        fi
+    done
+}
+upload_fpr(){
+    for i in $(seq 0 $((${#sc_id[@]} - 1))); do
+        if [ -n "${sc_id[$i]}" ] && [ -n "${app[$i]}" ] && [ -n "${app_v[$i]}" ]; then
+            ###SSC Instructions
+            echo -e "$blue $i. ScanID: ${sc_id[$i]} / Application: ${app[$i]} / Application Version: ${app_v[$i]} $end"
+            sleep 1
+            fcli ssc appversion create "${app[$i]}":"${app_v[$i]}" --auto-required-attrs --skip-if-exists --store myVersion
+            
             #Needed reference to scan id
             id="${sc_id[$i]}.fpr"
-
-            # ###SSC Instructions
-            echo -e "ScanID: ${sc_id[$i]} / Application: ${app[$i]} / Application Version: ${app_v[$i]}"
-            fcli ssc appversion create "$app[$i]":"$app_v[$i]" --auto-required-attrs --skip-if-exists --store myVersion
-            fcli ssc artifact upload --appversion ::myVersion:: -f=$id
             sleep 1
+
+            ##Upload
+            fcli ssc artifact upload --appversion ::myVersion:: -f=$id
             echo ""
         else
             echo "Index $i empty"
@@ -135,7 +147,7 @@ main(){
     echo -e "$green Welcome to the cross utility$end"
     echo "This tool was developed to allow customers who need to synchronize FPR files across different environments (FOD <---> Fortify On Prem)"
     echo ""
-    loading
+    #loading
     welcome
 }
 
