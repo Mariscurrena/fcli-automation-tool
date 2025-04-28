@@ -33,6 +33,7 @@ scan(){
 }
 upload(){
     echo -e "$blue Uploading to SSC...$end"
+    fcli ssc artifact import-debricked -t $1 --av "$2":"$3" -r $4 --branch=''
 }
 welcome(){
     echo -e "$blue ---> Welcome to Debricked - Software Security Center Utility <---$end"
@@ -43,19 +44,24 @@ welcome(){
     read project
     echo -ne "$blue *Debricked Repository: $end"
     read repo
-    # echo -ne "$blue *Debricked Token: $end"
-    # read -s token
-    # echo ""
-    # echo -ne "$blue SSC App: $end"
-    # read app
-    # echo -ne "$blue SSC App version: $end"
-    # read av
-    # loading
+    echo -ne "$blue *Debricked Token: $end"
+    read -s token
+    echo ""
+    echo -ne "$blue SSC App: $end"
+    read app
+    echo -ne "$blue SSC App version: $end"
+    read av
+    loading
     scan $project $repo
-    # loading
-    upload
+    loading
+    upload $token $app $av $repo
+    sleep 1
+    echo -e "$green --> Finished <--$end"
 }
 main(){
     welcome
+    echo ""
+    sleep 1
+    exit
 }
 main
