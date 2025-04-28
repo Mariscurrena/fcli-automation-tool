@@ -33,8 +33,21 @@ loading(){
 oss-scan(){
     echo -ne "$blue Project Path (including project name): $end"
     read path
+    echo -ne "$blue Repository Name: $end"
+    read repo
     echo -e "$blue Files found with OSS Dependencies are: $end" 
     /home/steve/Documents/fcli/debricked-cli/debricked files find $path
+    echo ""
+    #### Without Reachability Analysis
+    echo -e "$blue Scanning... $end" 
+    /home/steve/Documents/fcli/debricked-cli/debricked scan $path -c oss-automation-script -r $repo
+    echo -e "$green Scan Finished $end" 
+    echo ""
+    # #### With Reachability Analysis
+    # echo -e "$blue Scanning... $end" 
+    # /home/steve/Documents/fcli/debricked-cli/debricked scan $path -c oss-automation-script-CG -r $repo --callgraph
+    # echo -e "$green Scan Finished $end" 
+    # echo ""
 }
 welcome(){
     echo -e "$blue Welcome to Debricked CLI Automation Utility $end"
