@@ -8,6 +8,9 @@ This repository contains automation scripts created to perform custom actions to
   ### * Running static analysis (SAST) in all command-line tools, whether in IDE command lines or any supported terminal in a friendly way (MS-DOS or UNIX).
   ### * Filtering all vulnerabilities labeled as exploitable into all scaned apps to obtain documented information and demonstrate regulatory compliance in an audit process.
   ### * Importing and exporting artifacts between different deployment environments such as FOD (SaaS deployment) and Fortify On Premises.
+  ### * Importing and exporting multiple artifacts between different deployment environments using a csv list.
+  ### * Performing Debricked Software Composition Analysis with Debricked CLI to a local app.
+  ### * Automate the upload of open source results to SSC from a software composition scan to a local app.
 
 This repository will continue to be developed, adding more features and automation capabilities to address demanding requirements easily, quickly, and efficiently using the Fortify ecosystem.
 
