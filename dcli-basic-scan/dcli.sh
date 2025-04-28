@@ -54,7 +54,7 @@ welcome(){
 }
 main(){
     welcome
-    #loading
+    loading
     oss-scan
 }
 main
